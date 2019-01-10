@@ -9,15 +9,15 @@ node {
 	stage('Compile Test Package') {    
 		dir(project_path) {
 			withSonarQubeEnv('My SonarQube Server') {
-			  sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-			  echo 'Maven Cleaned and Packaged'
+				sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+				echo 'Maven Clean and Package Success'
 			}
 		}
 	}
 	
 	stage('Archival') {
 		archiveArtifacts 'sampleWebApp/target/*.war'
-		echo 'Artifacted'
+		echo 'Artifact Archival Success'
 	}
 
 }
