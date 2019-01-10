@@ -1,0 +1,23 @@
+node {
+    stage("Git Clone") {
+		//Cloning the repo from Git
+		git 'https://github.com/Vishwesh126/DevOps301Vishwesh.git'
+		echo 'Git Clone Success'
+    }
+	
+	def project_path= "DevOps301Vishwesh/"    
+	stage('Compile Test Package') {    
+		dir(project_path) {
+			withSonarQubeEnv('My SonarQube Server') {
+			  sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+			  echo 'Maven Cleaned and Packaged'
+			}
+		}
+	}
+	
+	stage('Archival') {
+		archiveArtifacts 'sampleWebApp/target/*.war'
+		echo 'Artifacted'
+	}
+
+}
