@@ -1,35 +1,62 @@
-//Pipeline Script
+//PipelineScript
 
-
-node {
-    stage("SCM Checkout") {
-		//Cloning the repo from Git
-		git 'https://github.com/Vishwesh126/DevOps301Vishwesh.git'
-		echo 'Git Clone Success'
-    }
+pipeline {
     
-    //Variable for the project path
-	def project_path= "DevOps301Vishwesh/"
-    stage("Maven Build") {
-    	dir(project_path) {
-	    	sh 'mvn clean'
-	    	echo 'Maven Build Success'
-    	}
-    }	
-	    
-	stage('Maven Package') {    
-		//Maven phase with Sonar Analysis
-		dir(project_path) {
-			withSonarQubeEnv('My SonarQube Server') {
-				sh 'mvn package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-				echo 'Maven Packaging Success'
+    agent any
+    
+    stages {
+		stage('Properties Load') {
+			steps {
+				script {
+					props = readProperties file: 'PropertiesFile/pipeline.properties'
+					echo 'Properties file loaded Success'
+				}
 			}
 		}
+		
+		stage('SCM Checkout') {
+			steps {
+				git url: props.GIT_URL,
+                branch: props.BRANCH
+				echo 'GIT SCM Checkout Success'
+			}
+		}
+		
+		stage('Maven Build') {
+            steps {
+				bat props.MAVEN_BUILD
+				echo 'build success'
+            }
+		}
+		
+		stage('SonarQube Analysis') {
+            steps {
+				sh props.SONAR_SCAN+' '+props.SONAR_HOST
+				echo 'scan success'
+			}
+        }        
+		
+		stage('Artifact Upload') {
+            steps {
+				script {
+					server = Artifactory.server props.ARTIFACTORY_ID
+					uploadSpec = """{
+						"files":[{
+							"pattern": "target/*.war",
+							"target": "Jenkins-snapshot"
+						}]
+					}"""
+				server.upload(uploadSpec) 	
+				echo 'Artifact Upload Success'
+				}
+            }
+		}
+		
+		stage('Deployment') {
+            steps {
+				sh props.TOMCAT_DEPLOY+' '+props.TOMCAT_LOCATION
+				echo 'Deployment Success'
+            }
+		}
 	}
-	
-	stage('Archival') {
-		archiveArtifacts 'sampleWebApp/target/*.war'
-		echo 'Artifact Archival Success'
-	}
-
 }
