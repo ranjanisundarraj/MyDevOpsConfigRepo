@@ -22,7 +22,7 @@ node {
 		dir(project_path) {
 			withSonarQubeEnv('My SonarQube Server') {
 				sh 'mvn package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-				echo 'Maven Clean and Package Success'
+				echo 'Maven Packaging Success'
 			}
 		}
 	}
