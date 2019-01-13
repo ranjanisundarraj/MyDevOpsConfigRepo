@@ -8,13 +8,15 @@ node {
 		echo 'Git Clone Success'
     }
     
+    //Variable for the project path
+	def project_path= "DevOps301Vishwesh/"
     stage("Maven Build") {
-    	sh 'mvn clean'
-    	echo 'Maven Build Success'
-    }
-	
-	//Variable for the project path
-	def project_path= "DevOps301Vishwesh/"    
+    	dir(project_path) {
+	    	sh 'mvn clean'
+	    	echo 'Maven Build Success'
+    	}
+    }	
+	    
 	stage('Maven Package') {    
 		//Maven phase with Sonar Analysis
 		dir(project_path) {
