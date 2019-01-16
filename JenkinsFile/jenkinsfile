@@ -9,7 +9,7 @@ pipeline {
 			steps {
 				script {
 					props = readProperties file: 'PropertiesFile/pipeline.properties'
-					echo 'Properties file loaded Success'
+					echo 'Properties file load Success'
 				}
 			}
 		}
@@ -24,15 +24,15 @@ pipeline {
 		
 		stage('Maven Build') {
             steps {
-				bat props.MAVEN_BUILD
-				echo 'build success'
+				sh props.MAVEN_BUILD
+				echo 'Maven build Success'
             }
 		}
 		
 		stage('SonarQube Analysis') {
             steps {
 				sh props.SONAR_SCAN+' '+props.SONAR_HOST
-				echo 'scan success'
+				echo 'SonarQube Ananlysis Success'
 			}
         }        
 		
