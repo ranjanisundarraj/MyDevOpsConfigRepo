@@ -29,7 +29,7 @@ node {
 	}
 	
 	stage('Archival') {
-		archiveArtifacts 'DevOps301Vishwesh/sampleWebApp/*.war'
+		archiveArtifacts 'DevOps301Vishwesh/sampleWebApp/target/*.war'
 		echo 'Artifact Archival Success'
 	}
 
