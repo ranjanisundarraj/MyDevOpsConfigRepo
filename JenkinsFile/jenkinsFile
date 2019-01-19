@@ -5,7 +5,9 @@ pipeline {
 			stage('Load Properties File') {
 				steps {
 					script {
-						props = readProperties file: 'PropertiesFile/pipeline.properties' 
+						gitHubProps = readProperties file: 'PropertiesFile/github.properties'
+						artProps = readProperties file: 'PropertiesFile/artifactory.properties'
+						sonarProps = readProperties file: 'PropertiesFile/sonarQube.properties'  
 						echo "Properties File load Success"
 						}
 					}
@@ -14,8 +16,8 @@ pipeline {
 			//GIT Cloning
 			stage('SCM Checkout') {
 				steps {
-					git url: props.GIT_URL,
-					branch: props.BRANCH
+					git url: gitHubProps.GIT_APP_REPO,
+					branch: gitHubProps.GIT_APP_REPO_BRANCH
 					echo 'SCM Checkout Success'
 					}
 			}
@@ -23,8 +25,8 @@ pipeline {
 			//Sonar Scanning
 			stage('SonarQube Analysis') {
 				steps {
-					dir(props.PROJECT_PATH) {
-						sh props.BUILD_SONAR_SCAN
+					dir(gitHubProps.PROJECT_PATH) {
+						sh sonarProps.BUILD_SONAR_SCAN
 						echo 'SoanrQube Analysis Success'
 					}
 				}
@@ -33,8 +35,8 @@ pipeline {
 			//Maven Building
 			stage('Maven Build') {
 				steps {
-					dir(props.PROJECT_PATH) {
-						sh props.MAVEN_BUILD
+					dir(gitHubProps.PROJECT_PATH) {
+						sh gitHubProps.MAVEN_BUILD
 						echo 'Maven Build Success'
 					}
 				}
@@ -44,7 +46,7 @@ pipeline {
 			stage('Artifact Upload') {
 				steps {
 					script {
-						server = Artifactory.server props.ARTIFACTORY_SERVER
+						server = Artifactory.server artProps.ARTIFACTORY_SERVER
 						def uploadSpec = """{
 							"files": [
 	                    		{

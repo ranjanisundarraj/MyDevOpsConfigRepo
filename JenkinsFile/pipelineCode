@@ -1,6 +1,5 @@
 //Pipeline Script
 
-
 node {
 
     stage("SCM Checkout") {
@@ -34,3 +33,31 @@ node {
 	}
 
 }
+
+
+
+
+
+
+
+
+// Pipeline Properties
+
+## Git Repository URL
+GIT_URL=https://github.com/Vishwesh126/MyDevOpsAppRepo.git
+BRANCH=master
+PROJECT_PATH=DevOps301Vishwesh/
+
+##Sonar Scan
+BUILD_SONAR_SCAN=mvn sonar:sonar -Dsonar.host.url=http://my11272dns.eastus2.cloudapp.azure.com:9000/
+
+## Maven Phase
+MAVEN_BUILD=mvn clean
+
+## Artifactory
+ARTIFACTORY_SERVER=ART
+ARTIFACT_TARGET=DevOps301Vishwesh/sampleWebApp/target/*.war
+
+## Deployment
+TOMCAT_DEPLOY=cp target/*.war
+TOMCAT_LOCATION=/home/minduseradmin/apache-tomcat-8.5.35/webapps
