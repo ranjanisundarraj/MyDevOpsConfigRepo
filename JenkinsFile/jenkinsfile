@@ -5,7 +5,7 @@ pipeline {
 			stage('Load Properties File') {
 				steps {
 					script {
-						props = readProperties file: 'PropertiesFile/pipeline.properties'
+						props = readProperties file: 'PropertiesFile/pipeline.properties' 
 						echo "Properties File load Success"
 						}
 					}
@@ -50,10 +50,10 @@ pipeline {
 	                    		{
 	                    			"pattern": "target/*.war",
 	                        		"target": "DevOps301Vishwesh/sampleWebApp/target/*.war"
-	                        		echo "Artifact Archival Success"
 	                    		}
 	                    		]
 	                		}"""
+	                		echo "Artifact Archival Success"
 	                	server.upload(uploadSpec) 
               			echo "Artifact Upload Success"
 	            	}
