@@ -6,6 +6,7 @@ pipeline {
 				steps {
 					script {
 						props = readProperties file: 'PropertiesFile/pipeline.properties'
+						echo "Properties File load Success"
 						}
 					}
 			}
