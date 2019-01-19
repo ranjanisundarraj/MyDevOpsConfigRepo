@@ -50,7 +50,7 @@ pipeline {
 						def uploadSpec = """{
 							"files": [
 	                    		{
-	                    			"pattern": "DevOps301Vishwesh/sampleWebApp/target/*.war",
+	                    			"pattern": "target/*.war",
 	                        		"target": "DevOps301Vishwesh/sampleWebApp/target/*.war"
 	                    		}
 	                    		]
