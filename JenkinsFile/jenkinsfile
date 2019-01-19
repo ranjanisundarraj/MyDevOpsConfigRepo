@@ -21,7 +21,7 @@ node {
 	stage('Maven Package') {    
 		//Maven phase with Sonar Analysis
 		dir(project_path) {
-			withSonarQubeEnv('My SonarQube Server') {
+			withSonarQubeEnv('MySonarQubeTest') {
 				sh 'mvn package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
 				echo 'Maven Packaging Success'
 			}
