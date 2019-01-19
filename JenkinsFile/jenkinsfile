@@ -1,36 +1,64 @@
-//Pipeline Script
-
-
-node {
-
-    stage("SCM Checkout") {
-		//Cloning the repo from Git
-		git 'https://github.com/Vishwesh126/DevOps301Vishwesh.git'
-		echo 'Git Clone Success'
-    }
-    
-    //Variable for the project path
-	def project_path= "DevOps301Vishwesh/"
-    stage("Maven Build") {
-    	dir(project_path) {
-	    	sh 'mvn clean'
-	    	echo 'Maven Build Success'
-    	}
-    }	
-	    
-	stage('Maven Package') {    
-		//Maven phase with Sonar Analysis
-		dir(project_path) {
-			withSonarQubeEnv('SonarQube Server') {
-				sh 'mvn package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
-				echo 'Maven Packaging Success'
+pipeline {
+	agent any
+		stages {
+			//Properties File loading
+			stage('Load Properties File') {
+				steps {
+					script {
+						props = readProperties file: 'PropertiesFile/pipeline.properties'
+						}
+					}
 			}
-		}
-	}
-	
-	stage('Archival') {
-		archiveArtifacts 'DevOps301Vishwesh/sampleWebApp/target/*.war'
-		echo 'Artifact Archival Success'
-	}
 
+			//GIT Cloning
+			stage('SCM Checkout') {
+				steps {
+					git url: props.GIT_URL,
+					branch: props.BRANCH
+					echo 'SCM Checkout Success'
+					}
+			}
+
+			//Sonar Scanning
+			stage('SonarQube Analysis') {
+				steps {
+					dir(props.PROJECT_PATH) {
+						sh props.BUILD_SONAR_SCAN
+						echo 'SoanrQube Analysis Success'
+					}
+				}
+			}
+			
+			//Maven Building
+			stage('Maven Build') {
+				steps {
+					dir(props.PROJECT_PATH) {
+						sh props.MAVEN_BUILD
+						echo 'Maven Build Success'
+					}
+				}
+			}
+			
+			//Artifact Archiving and Uploading
+			stage('Artifact Upload') {
+				steps {
+					script {
+						server = Artifactory.server props.ARTIFACTORY_SERVER
+						def uploadSpec = """{
+							"files": [
+	                    		{
+	                    			"pattern": "target/*.war",
+	                        		"target": "DevOps301Vishwesh/sampleWebApp/target/*.war"
+	                        		echo "Artifact Archival Success"
+	                    		}
+	                    		]
+	                		}"""
+	                	server.upload(uploadSpec) 
+              			echo "Artifact Upload Success"
+	            	}
+				}
+			}	
+			
+			
+		}
 }
