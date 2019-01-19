@@ -1,0 +1,36 @@
+//Pipeline Script
+
+
+node {
+
+    stage("SCM Checkout") {
+		//Cloning the repo from Git
+		git 'https://github.com/Vishwesh126/DevOps301Vishwesh.git'
+		echo 'Git Clone Success'
+    }
+    
+    //Variable for the project path
+	def project_path= "DevOps301Vishwesh/"
+    stage("Maven Build") {
+    	dir(project_path) {
+	    	sh 'mvn clean'
+	    	echo 'Maven Build Success'
+    	}
+    }	
+	    
+	stage('Maven Package') {    
+		//Maven phase with Sonar Analysis
+		dir(project_path) {
+			withSonarQubeEnv('SonarQube Server') {
+				sh 'mvn package org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+				echo 'Maven Packaging Success'
+			}
+		}
+	}
+	
+	stage('Archival') {
+		archiveArtifacts 'DevOps301Vishwesh/sampleWebApp/target/*.war'
+		echo 'Artifact Archival Success'
+	}
+
+}
