@@ -81,13 +81,15 @@ pipeline {
         always {
 			script {
 				try {
-			        sh 'exit 1'
 			        currentBuild.result = 'SUCCESS'
+			        echo "Project Build is Success"
 			    } catch (any) {
 			        currentBuild.result = 'FAILURE'
+			        echo "Project Build is a Failure"
 			        throw any
 			    } finally {
 			        step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: gitHubProps.TO_RECIPIENT, sendToIndividuals: true])
+			        echo "Build status mail has been sent"
 			    }
 			}
         }
