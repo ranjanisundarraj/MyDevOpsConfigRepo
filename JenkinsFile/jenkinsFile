@@ -40,7 +40,17 @@ pipeline {
 						echo 'Maven Build Success'
 					}
 				}
-			}
+			}			
+			
+			//POM File Reading
+			stage('POM Read') {
+				steps {
+					pom = readMavenPom file: props.POM_FILE
+					artifactId=pom.artifactId
+					version=pom.version
+					echo "POM Details Load Success"
+				}
+			}			
 			
 			//Artifact Archiving and Uploading
 			stage('Artifact Upload') {
