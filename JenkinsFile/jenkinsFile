@@ -61,7 +61,7 @@ pipeline {
 							"files": [
 	                    		{
 	                    			"pattern": "target/*.war",
-	                        		"target": "DevOps301Vishwesh/sampleWebApp/target/*.war"
+	                        		"target": "DevOps301Vishwesh/sampleWebApp/target/${artifactId}/${version}.${buildNo}/"
 	                    		}
 	                    		]
 	                		}"""
