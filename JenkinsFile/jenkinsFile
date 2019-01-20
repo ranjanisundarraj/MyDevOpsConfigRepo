@@ -73,8 +73,24 @@ pipeline {
               			echo "Artifact Upload Success"
 	            	}
 				}
-			}	
-			
-			
+			}			
 		}
+		
+		
+		post {
+        always {
+			script {
+				try {
+			        sh 'exit 1'
+			        currentBuild.result = 'SUCCESS'
+			    } catch (any) {
+			        currentBuild.result = 'FAILURE'
+			        throw any
+			    } finally {
+			        step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: gitHubProps.TO_RECIPIENT, sendToIndividuals: true])
+			    }
+			}
+        }
+    }
+		
 }
