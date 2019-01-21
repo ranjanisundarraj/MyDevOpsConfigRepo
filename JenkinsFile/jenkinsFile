@@ -64,7 +64,7 @@ pipeline {
 							"files": [
 	                    		{
 	                    			"pattern": "target/*.war",
-	                        		"target": "demo-java/target/${artifactId}/${version}.${buildNo}/"
+	                        		"target": "demo-java/target/"
 	                    		}
 	                    		]
 	                		}"""
