@@ -79,7 +79,7 @@ pipeline {
 		
 		//Status eMail Triggering
 		post {
-	        always {
+			always {
 				script {
 					emailext( 
 						to: gitHubProps.TO_RECIPIENT,
