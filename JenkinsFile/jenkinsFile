@@ -61,30 +61,31 @@ pipeline {
               			echo "Artifact Upload Success"
 	            	}
 				}
-			}			
-		}
-		
-		// Deploying
-		stage('Deployment') {
-			steps {
-				script {
-					try	{
-						sh deployProps.dockerContainerId
-						res=readFile('result').trim()
-						
-						if(res!=null) {
-							sh deployProps.dockerContainerRm
+			}	
+			
+			// Deploying
+			stage('Deployment') {
+				steps {
+					script {
+						try	{
+							sh deployProps.dockerContainerId
+							res=readFile('result').trim()
+							
+							if(res!=null) {
+								sh deployProps.dockerContainerRm
+							}
+						} catch (err) {
+							echo 'Delete Failed'
 						}
-					} catch (err) {
-						echo 'Delete Failed'
-					}
-					
-					sh deployProps.dockerDeploy
-					sh deployProps.dockerRestart
-					
-					echo 'Deployment Success'
-				}		
+						
+						sh deployProps.dockerDeploy
+						sh deployProps.dockerRestart
+						
+						echo 'Deployment Success'
+					}		
+				}
 			}
+					
 		}
 		
 		
