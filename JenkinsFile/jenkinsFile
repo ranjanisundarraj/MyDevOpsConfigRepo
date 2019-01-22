@@ -42,19 +42,6 @@ pipeline {
 				}
 			}			
 			
-			//POM File Reading
-			stage('POM Read') {
-				steps {
-					script {
-						pom = readMavenPom file: gitHubProps.POM_FILE
-						artifactId = pom.artifactId
-						version = pom.version
-						buildNo = env.BUILD_NUMBER
-						echo "POM Details Load Success"
-					}					
-				}
-			}			
-			
 			//Artifact Archiving and Uploading
 			stage('Artifact Upload') {
 				steps {
@@ -64,7 +51,7 @@ pipeline {
 							"files": [
 	                    		{
 	                    			"pattern": "target/*.war",
-	                        		"target": "demo-java/target/${artifactId}/${version}.${buildNo}/"
+	                        		"target": "demo-java/target/Build #${env.BUILD_NUMBER}/"
 	                    		}
 	                    		]
 	                		}"""
