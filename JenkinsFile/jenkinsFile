@@ -82,11 +82,12 @@ pipeline {
 		}
 		
 		
-//Status eMail Triggering
-post {
-	always {
-		script {
-			commonFns.triggerEmail()
-		}
-    }
+	//Status eMail Triggering
+	post {
+		always {
+			script {
+				commonFns.triggerEmail()
+			}
+	    }
+	}
 }
