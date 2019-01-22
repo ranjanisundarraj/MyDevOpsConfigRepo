@@ -64,7 +64,7 @@ pipeline {
 							"files": [
 	                    		{
 	                    			"pattern": "target/*.war",
-	                        		"target": "demo-java/target/"
+	                        		"target": "demo-java/target/${artifactId}/${version}.${buildNo}/"
 	                    		}
 	                    		]
 	                		}"""
@@ -75,6 +75,8 @@ pipeline {
 				}
 			}			
 		}
+		
+		//
 		
 		
 		//Status eMail Triggering
