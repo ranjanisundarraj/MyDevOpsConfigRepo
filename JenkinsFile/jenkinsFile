@@ -7,7 +7,8 @@ pipeline {
 					script {
 						gitHubProps = readProperties file: 'PropertiesFile/github.properties'
 						artProps = readProperties file: 'PropertiesFile/artifactory.properties'
-						sonarProps = readProperties file: 'PropertiesFile/sonarQube.properties'  
+						sonarProps = readProperties file: 'PropertiesFile/sonarQube.properties'
+						deployProps = readProperties file: 'PropertiesFile/deployment.properties'
 						echo "Properties File load Success"
 						}
 					}
@@ -63,7 +64,28 @@ pipeline {
 			}			
 		}
 		
-		//
+		// Deploying
+		stage('Deployment') {
+			steps {
+				script {
+					try	{
+						sh deployProps.dockerContainerId
+						res=readFile('result').trim()
+						
+						if(res!=null) {
+							sh deployProps.dockerContainerRm
+						}
+					} catch (err) {
+						echo 'Delete Failed'
+					}
+					
+					sh deployProps.dockerDeploy
+					sh deployProps.dockerRestart
+					
+					echo 'Deployment Success'
+				}		
+			}
+		}
 		
 		
 		//Status eMail Triggering
