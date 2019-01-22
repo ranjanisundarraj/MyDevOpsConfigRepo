@@ -10,7 +10,8 @@ pipeline {
 						sonarProps = readProperties file: 'PropertiesFile/sonarQube.properties'
 						deployProps = readProperties file: 'PropertiesFile/deployment.properties'
 						
-						git url: gitHubProps.GIT_UTIL_REPO, branch: gitHubProps.GIT_UTIL_REPO_BRANCH
+						git url: gitHubProps.GIT_UTIL_REPO, 
+						branch: gitHubProps.GIT_UTIL_REPO_BRANCH
 						commonFns = load gitHubProps.COMMON_FNS
 						echo "Properties File load Success"
 						}
@@ -20,7 +21,8 @@ pipeline {
 			//GIT Cloning
 			stage('SCM Checkout') {
 				steps {
-					git url: gitHubProps.GIT_APP_REPO, branch: gitHubProps.GIT_APP_REPO_BRANCH
+					git url: gitHubProps.GIT_APP_REPO, 
+					branch: gitHubProps.GIT_APP_REPO_BRANCH
 					echo 'SCM Checkout Success'
 					}
 			}
