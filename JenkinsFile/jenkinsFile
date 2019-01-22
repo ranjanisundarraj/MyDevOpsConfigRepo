@@ -87,6 +87,7 @@ pipeline {
 		always {
 			script {
 				commonFns.triggerEmail()
+				commonFns.flushWorkspace()
 			}
 	    }
 	}
