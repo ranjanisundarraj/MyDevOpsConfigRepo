@@ -63,8 +63,8 @@ pipeline {
 				}
 			}	
 			
-			// Deploying
-			stage('Deployment') {
+			// Docker Deploying
+			stage('Docker Deployment') {
 				steps {
 					script {
 						try	{
@@ -73,15 +73,17 @@ pipeline {
 							
 							if(res!=null) {
 								sh deployProps.dockerContainerRm
+								echo "Docker Container Found and removed"
 							}
 						} catch (err) {
-							echo 'Delete Failed'
+							echo "Delete Failed"
 						}
 						
 						sh deployProps.dockerDeploy
+						echo "Deployment Success"
 						sh deployProps.dockerRestart
+						echo "Docker Restarted"
 						
-						echo 'Deployment Success'
 					}		
 				}
 			}
