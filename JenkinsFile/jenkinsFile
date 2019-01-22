@@ -47,9 +47,10 @@ pipeline {
 			
 			//Artifact Archiving and Uploading
 			stage('Artifact Upload') {
-				script {
-					commonFns.uploadToArtifactory()
-	            	}
+				steps {
+					script {
+						commonFns.uploadToArtifactory()
+	            	}				
 				}
 			}	
 			
